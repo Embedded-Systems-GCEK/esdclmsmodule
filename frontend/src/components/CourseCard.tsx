@@ -13,44 +13,55 @@ interface CourseCardProps {
 
 const CourseCard = ({ id, title, code, description, onEdit, onDelete }: CourseCardProps) => {
   return (
-    <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition p-6 border border-gray-200">
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center space-x-3">
-          <div className="bg-blue-100 p-3 rounded-lg">
-            <BookOpen className="w-6 h-6 text-blue-600" />
+    <div className="group relative overflow-hidden rounded-2xl border border-cyan-500/20 bg-bg-card p-5 shadow-glow transition hover:border-cyan-400/60 hover:shadow-[0_0_40px_rgba(34,211,238,0.45)]">
+      {/* subtle gradient border flare */}
+      <div className="pointer-events-none absolute inset-px rounded-2xl bg-gradient-to-br from-cyan-500/10 via-transparent to-violet-500/10 opacity-0 transition group-hover:opacity-100" />
+
+      <div className="relative flex items-start justify-between gap-3">
+        <div className="flex items-start space-x-3">
+          <div className="mt-1 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900/80 ring-1 ring-cyan-400/40">
+            <BookOpen className="h-5 w-5 text-cyan-300" />
           </div>
           <div>
-            <h3 className="text-xl font-semibold text-gray-800">{title}</h3>
-            <p className="text-sm text-gray-500">{code}</p>
+            <h3 className="text-lg font-semibold text-slate-50">
+              {title}
+            </h3>
+            <p className="text-xs font-mono tracking-wide text-cyan-300/80">
+              {code}
+            </p>
           </div>
         </div>
 
         {isAdmin() && (
-          <div className="flex space-x-2">
+          <div className="flex space-x-1">
             <button
               onClick={onEdit}
-              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
+              className="rounded-full p-1.5 text-cyan-300 transition hover:bg-cyan-500/10 hover:text-cyan-100"
             >
-              <Edit className="w-5 h-5" />
+              <Edit className="h-4 w-4" />
             </button>
             <button
               onClick={onDelete}
-              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+              className="rounded-full p-1.5 text-red-300 transition hover:bg-red-500/10 hover:text-red-100"
             >
-              <Trash2 className="w-5 h-5" />
+              <Trash2 className="h-4 w-4" />
             </button>
           </div>
         )}
       </div>
 
-      <p className="text-gray-600 mb-4 line-clamp-2">{description}</p>
+      <p className="mt-3 line-clamp-3 text-sm text-slate-300/90">
+        {description}
+      </p>
 
-      <Link
-        to={`/courses/${id}`}
-        className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition"
-      >
-        View Course
-      </Link>
+      <div className="mt-5 flex items-center justify-between">
+        <Link
+          to={`/courses/${id}`}
+          className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-500 to-violet-500 px-4 py-2 text-xs font-semibold text-slate-950 shadow-glow transition hover:from-cyan-400 hover:to-violet-400"
+        >
+          View Course
+        </Link>
+      </div>
     </div>
   );
 };

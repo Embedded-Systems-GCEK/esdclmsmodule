@@ -1,7 +1,15 @@
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, FileText, PlusCircle, Edit, Trash2 } from 'lucide-react';
+import {
+  ChevronDown,
+  ChevronUp,
+  FileText,
+  PlusCircle,
+  Edit,
+  Trash2,
+  PlayCircle,
+} from 'lucide-react';
 import { isAdmin } from '../utils/auth';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 interface Lesson {
   id: string;
@@ -22,6 +30,7 @@ interface ModuleCardProps {
 }
 
 const ModuleCard = ({
+  id,
   title,
   description,
   lessons,
@@ -29,66 +38,76 @@ const ModuleCard = ({
   onEditLesson,
   onDeleteLesson,
 }: ModuleCardProps) => {
-
   const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
 
   return (
-    <div className="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
-      <div
-        className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 transition"
-        onClick={() => setIsExpanded(!isExpanded)}
+    <div className="overflow-hidden rounded-2xl border border-cyan-500/30 bg-bg-card shadow-glow transition hover:border-cyan-400/70">
+      <button
+        className="flex w-full items-center justify-between px-5 py-4 text-left transition hover:bg-slate-900/80"
+        onClick={() => setIsExpanded((p) => !p)}
       >
         <div className="flex-1">
-          <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
-          <p className="text-sm text-gray-600 mt-1">{description}</p>
-          <p className="text-xs text-gray-500 mt-2">
+          <h3 className="text-base font-semibold text-slate-50">{title}</h3>
+          <p className="mt-1 text-xs text-slate-400">{description}</p>
+          <p className="mt-2 text-[11px] font-mono uppercase tracking-[0.18em] text-cyan-300/70">
             {lessons.length} lesson{lessons.length !== 1 ? 's' : ''}
           </p>
         </div>
-        <button className="text-gray-500 hover:text-gray-700">
+        <span className="rounded-full border border-cyan-500/40 bg-slate-900/60 p-1 text-cyan-300">
           {isExpanded ? (
-            <ChevronUp className="w-6 h-6" />
+            <ChevronUp className="h-4 w-4" />
           ) : (
-            <ChevronDown className="w-6 h-6" />
+            <ChevronDown className="h-4 w-4" />
           )}
-        </button>
-      </div>
+        </span>
+      </button>
 
       {isExpanded && (
-        <div className="border-t border-gray-200 bg-gray-50">
+        <div className="border-t border-slate-700/70 bg-slate-950/70">
           {lessons.length > 0 ? (
-            <div className="divide-y divide-gray-200">
+            <div className="divide-y divide-slate-800/80">
               {lessons.map((lesson) => (
                 <div
                   key={lesson.id}
                   onClick={() => navigate(`/lessons/${lesson.id}`)}
-                  className="p-4 flex items-center justify-between hover:bg-gray-100 transition cursor-pointer"
+                  className="flex cursor-pointer items-center justify-between px-5 py-3 text-sm text-slate-200 transition hover:bg-slate-900/90"
                 >
                   <div className="flex items-center space-x-3">
-                    <FileText className="w-5 h-5 text-blue-600" />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-900 ring-1 ring-cyan-400/40">
+                      {lesson.contentType === 'video' ? (
+                        <PlayCircle className="h-4 w-4 text-cyan-300" />
+                      ) : (
+                        <FileText className="h-4 w-4 text-cyan-300" />
+                      )}
+                    </div>
                     <div>
-                      <p className="font-medium text-gray-800">{lesson.title}</p>
-                      <p className="text-xs text-gray-500 capitalize">
+                      <p className="font-medium">{lesson.title}</p>
+                      <p className="text-[11px] capitalize text-slate-400">
                         {lesson.contentType}
                       </p>
                     </div>
                   </div>
 
                   {isAdmin() && (
-                    <div className="flex space-x-2">
+                    <div className="flex space-x-1">
                       <button
-                        onClick={(e) => { e.stopPropagation(); onEditLesson?.(lesson.id); }}
-                        className="p-1 text-blue-600 hover:bg-blue-50 rounded transition"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onEditLesson?.(lesson.id);
+                        }}
+                        className="rounded-full p-1.5 text-cyan-300 transition hover:bg-cyan-500/10 hover:text-cyan-100"
                       >
-                        <Edit className="w-4 h-4" />
+                        <Edit className="h-3.5 w-3.5" />
                       </button>
-
                       <button
-                        onClick={(e) => { e.stopPropagation(); onDeleteLesson?.(lesson.id); }}
-                        className="p-1 text-red-600 hover:bg-red-50 rounded transition"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDeleteLesson?.(lesson.id);
+                        }}
+                        className="rounded-full p-1.5 text-red-300 transition hover:bg-red-500/10 hover:text-red-100"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="h-3.5 w-3.5" />
                       </button>
                     </div>
                   )}
@@ -96,18 +115,18 @@ const ModuleCard = ({
               ))}
             </div>
           ) : (
-            <div className="p-4 text-center text-gray-500">
+            <div className="px-5 py-5 text-center text-sm text-slate-400">
               No lessons in this module yet.
             </div>
           )}
 
           {isAdmin() && (
-            <div className="p-4 border-t border-gray-200">
+            <div className="border-t border-slate-800/80 px-5 py-4">
               <button
                 onClick={onAddLesson}
-                className="w-full flex items-center justify-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition"
+                className="flex w-full items-center justify-center space-x-2 rounded-xl bg-gradient-to-r from-cyan-500/80 to-violet-500/80 px-4 py-2.5 text-sm font-semibold text-slate-950 shadow-glow transition hover:from-cyan-400 hover:to-violet-400"
               >
-                <PlusCircle className="w-5 h-5" />
+                <PlusCircle className="h-4 w-4" />
                 <span>Add Lesson</span>
               </button>
             </div>

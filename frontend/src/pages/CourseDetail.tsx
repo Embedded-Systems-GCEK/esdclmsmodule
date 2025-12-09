@@ -43,6 +43,7 @@ const CourseDetail = () => {
 
   useEffect(() => {
     fetchCourse();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const fetchCourse = async () => {
@@ -101,10 +102,10 @@ const CourseDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen pb-10">
         <Navbar />
-        <div className="flex items-center justify-center h-96">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="flex h-[60vh] items-center justify-center">
+          <div className="h-10 w-10 animate-spin rounded-full border-2 border-cyan-500 border-t-transparent" />
         </div>
       </div>
     );
@@ -112,11 +113,16 @@ const CourseDetail = () => {
 
   if (!course) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen pb-10">
         <Navbar />
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-800">Course not found</h2>
+        <div className="mx-auto max-w-7xl px-4 py-10">
+          <div className="rounded-3xl border border-slate-700/80 bg-slate-950/70 p-10 text-center">
+            <h2 className="text-2xl font-semibold text-slate-50">
+              Course not found
+            </h2>
+            <p className="mt-2 text-sm text-slate-400">
+              The course you are looking for does not exist or has been removed.
+            </p>
           </div>
         </div>
       </div>
@@ -124,85 +130,96 @@ const CourseDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen pb-10">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-xl shadow-md p-8 mb-8">
-          <div className="flex items-start justify-between">
-            <div className="flex items-start space-x-4">
-              <div className="bg-blue-100 p-4 rounded-xl">
-                <BookOpen className="w-12 h-12 text-blue-600" />
+      <main className="mx-auto mt-6 max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <section className="mb-8 rounded-3xl border border-cyan-500/30 bg-bg-card p-6 shadow-glow">
+          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-start">
+            <div className="flex gap-4">
+              <div className="mt-1 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-950/80 ring-2 ring-cyan-400/50">
+                <BookOpen className="h-7 w-7 text-cyan-300" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-800 mb-2">
+                <p className="text-xs font-mono uppercase tracking-[0.2em] text-cyan-300">
+                  Course
+                </p>
+                <h1 className="mt-1 text-3xl font-bold text-slate-50">
                   {course.title}
                 </h1>
-                <p className="text-gray-500 mb-4">{course.code}</p>
-                <p className="text-gray-700">{course.description}</p>
+                <p className="mt-1 text-xs font-mono text-slate-400">
+                  {course.code}
+                </p>
+                <p className="mt-3 text-sm text-slate-200">
+                  {course.description}
+                </p>
               </div>
             </div>
 
             {!isAdmin() && (
-              <div>
+              <div className="flex items-center">
                 {course.isEnrolled ? (
-                  <div className="flex items-center space-x-2 bg-green-100 text-green-700 px-6 py-3 rounded-lg font-medium">
-                    <CheckCircle className="w-5 h-5" />
+                  <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/60 bg-emerald-500/15 px-4 py-2 text-sm font-medium text-emerald-200">
+                    <CheckCircle className="h-4 w-4" />
                     <span>Enrolled</span>
                   </div>
                 ) : (
                   <button
                     onClick={handleEnroll}
                     disabled={enrolling}
-                    className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-50"
+                    className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-500 to-violet-500 px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-glow transition hover:from-cyan-400 hover:to-violet-400 disabled:opacity-60"
                   >
-                    {enrolling ? 'Enrolling...' : 'Enroll Now'}
+                    {enrolling ? 'Enrolling…' : 'Enroll Now'}
                   </button>
                 )}
               </div>
             )}
           </div>
-        </div>
+        </section>
 
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-semibold text-gray-800">
-            Course Modules
-          </h2>
-          {isAdmin() && (
-            <button
-              onClick={() => setShowModuleModal(true)}
-              className="flex items-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition"
-            >
-              <PlusCircle className="w-5 h-5" />
-              <span>Add Module</span>
-            </button>
+        {/* Modules */}
+        <section>
+          <div className="mb-5 flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-slate-50">
+              Course Modules
+            </h2>
+            {isAdmin() && (
+              <button
+                onClick={() => setShowModuleModal(true)}
+                className="inline-flex items-center gap-2 rounded-full bg-cyan-500/15 px-4 py-2 text-xs font-semibold text-cyan-200 ring-1 ring-cyan-400/60 transition hover:bg-cyan-500/25"
+              >
+                <PlusCircle className="h-4 w-4" />
+                <span>Add Module</span>
+              </button>
+            )}
+          </div>
+
+          {course.modules && course.modules.length > 0 ? (
+            <div className="space-y-4">
+              {course.modules.map((module) => (
+                <ModuleCard
+                  key={module.id}
+                  {...module}
+                  onAddLesson={() => openAddLessonModal(module.id)}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-3xl border border-dashed border-slate-700/80 bg-slate-950/70 p-10 text-center">
+              <BookOpen className="mx-auto mb-4 h-10 w-10 text-slate-500" />
+              <h3 className="text-lg font-semibold text-slate-100">
+                No modules yet
+              </h3>
+              <p className="mt-2 text-sm text-slate-400">
+                {isAdmin()
+                  ? 'Get started by adding your first module.'
+                  : 'This course is still being developed.'}
+              </p>
+            </div>
           )}
-        </div>
-
-        {course.modules && course.modules.length > 0 ? (
-          <div className="space-y-4">
-            {course.modules.map((module) => (
-              <ModuleCard
-                key={module.id}
-                {...module}
-                onAddLesson={() => openAddLessonModal(module.id)}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12 bg-white rounded-xl shadow">
-            <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">
-              No modules yet
-            </h3>
-            <p className="text-gray-600 mb-4">
-              {isAdmin()
-                ? 'Get started by adding your first module.'
-                : 'This course is still being developed.'}
-            </p>
-          </div>
-        )}
-      </div>
+        </section>
+      </main>
 
       {showModuleModal && (
         <AddModuleModal

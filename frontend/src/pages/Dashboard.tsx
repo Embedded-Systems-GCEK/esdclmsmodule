@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { PlusCircle, BookMarked } from 'lucide-react';
+import { PlusCircle, BookMarked, Cpu } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import CourseCard from '../components/CourseCard';
 import axios from '../api/axios';
@@ -37,7 +37,7 @@ const Dashboard = () => {
     if (window.confirm('Are you sure you want to delete this course?')) {
       try {
         await axios.delete(`/admin/courses/${id}`);
-        setCourses(courses.filter((course) => course.id !== id));
+        setCourses((prev) => prev.filter((course) => course.id !== id));
       } catch (error) {
         console.error('Failed to delete course:', error);
       }
@@ -45,115 +45,106 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen pb-10">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
-            Welcome back, {user?.name}!
-          </h1>
-          <p className="text-gray-600">
-            {isAdmin()
-              ? 'Manage your courses and create new learning content.'
-              : 'Continue your learning journey.'}
-          </p>
-        </div>
-
-        {isAdmin() ? (
-          <div>
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-semibold text-gray-800">
-                All Courses
-              </h2>
-              <Link
-                to="/admin/create-course"
-                className="flex items-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition"
-              >
-                <PlusCircle className="w-5 h-5" />
-                <span>Create New Course</span>
-              </Link>
+      <main className="mx-auto mt-6 max-w-7xl px-4 sm:px-6 lg:px-8">
+        <section className="mb-8 rounded-3xl border border-cyan-500/30 bg-bg-card p-6 shadow-glow">
+          <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+            <div>
+              <p className="text-xs font-mono uppercase tracking-[0.2em] text-cyan-300">
+                Embedded Systems Design Club
+              </p>
+              <h1 className="mt-2 text-3xl font-bold text-slate-50">
+                Welcome back, {user?.name}
+              </h1>
+              <p className="mt-2 max-w-xl text-sm text-slate-300">
+                {isAdmin()
+                  ? 'Monitor modules, push new content, and keep your learners in sync with the latest embedded design concepts.'
+                  : 'Pick up where you left off and continue exploring embedded systems, one module at a time.'}
+              </p>
             </div>
 
-            {loading ? (
-              <div className="text-center py-12">
-                <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="flex items-center gap-3">
+              <div className="hidden h-20 w-20 items-center justify-center rounded-2xl border border-cyan-400/40 bg-slate-900/70 shadow-inner-glow md:flex">
+                <Cpu className="h-10 w-10 text-cyan-300" />
               </div>
-            ) : courses.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {courses.map((course) => (
-                  <CourseCard
-                    key={course.id}
-                    {...course}
-                    onDelete={() => handleDelete(course.id)}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12 bg-white rounded-xl shadow">
-                <BookMarked className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                  No courses yet
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Get started by creating your first course.
-                </p>
+              {isAdmin() ? (
                 <Link
                   to="/admin/create-course"
-                  className="inline-flex items-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition"
+                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-500 to-violet-500 px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-glow transition hover:from-cyan-400 hover:to-violet-400"
                 >
-                  <PlusCircle className="w-5 h-5" />
+                  <PlusCircle className="h-4 w-4" />
                   <span>Create Course</span>
                 </Link>
-              </div>
-            )}
-          </div>
-        ) : (
-          <div>
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-semibold text-gray-800">
-                My Enrolled Courses
-              </h2>
-              <Link
-                to="/courses"
-                className="flex items-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition"
-              >
-                <BookMarked className="w-5 h-5" />
-                <span>Browse Courses</span>
-              </Link>
-            </div>
-
-            {loading ? (
-              <div className="text-center py-12">
-                <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-              </div>
-            ) : courses.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {courses.map((course) => (
-                  <CourseCard key={course.id} {...course} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12 bg-white rounded-xl shadow">
-                <BookMarked className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                  No enrolled courses
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Browse available courses and start learning today.
-                </p>
+              ) : (
                 <Link
                   to="/courses"
-                  className="inline-flex items-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition"
+                  className="inline-flex items-center gap-2 rounded-full border border-cyan-400/60 bg-cyan-500/10 px-5 py-2.5 text-sm font-semibold text-cyan-200 transition hover:bg-cyan-500/20"
                 >
-                  <BookMarked className="w-5 h-5" />
+                  <BookMarked className="h-4 w-4" />
                   <span>Browse Courses</span>
                 </Link>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        )}
-      </div>
+        </section>
+
+        <section>
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-slate-50">
+              {isAdmin() ? 'All Courses' : 'My Enrolled Courses'}
+            </h2>
+          </div>
+
+          {loading ? (
+            <div className="flex h-40 items-center justify-center">
+              <div className="h-10 w-10 animate-spin rounded-full border-2 border-cyan-500 border-t-transparent" />
+            </div>
+          ) : courses.length > 0 ? (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {courses.map((course) => (
+                <CourseCard
+                  key={course.id}
+                  {...course}
+                  onDelete={isAdmin() ? () => handleDelete(course.id) : undefined}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-3xl border border-dashed border-slate-700/70 bg-slate-950/60 p-10 text-center">
+              <BookMarked className="mx-auto mb-4 h-10 w-10 text-slate-500" />
+              <h3 className="text-lg font-semibold text-slate-100">
+                {isAdmin() ? 'No courses yet' : 'No enrolled courses'}
+              </h3>
+              <p className="mt-2 text-sm text-slate-400">
+                {isAdmin()
+                  ? 'Kickstart your LMS by creating the first embedded systems course.'
+                  : 'Browse the available courses and start learning today.'}
+              </p>
+              <div className="mt-5">
+                {isAdmin() ? (
+                  <Link
+                    to="/admin/create-course"
+                    className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-500 to-violet-500 px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-glow"
+                  >
+                    <PlusCircle className="h-4 w-4" />
+                    <span>Create Course</span>
+                  </Link>
+                ) : (
+                  <Link
+                    to="/courses"
+                    className="inline-flex items-center gap-2 rounded-full border border-cyan-400/60 bg-cyan-500/10 px-5 py-2.5 text-sm font-semibold text-cyan-200"
+                  >
+                    <BookMarked className="h-4 w-4" />
+                    <span>Browse Courses</span>
+                  </Link>
+                )}
+              </div>
+            </div>
+          )}
+        </section>
+      </main>
     </div>
   );
 };

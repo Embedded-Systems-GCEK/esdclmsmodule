@@ -1,3 +1,4 @@
+// src/router/AppRouter.tsx
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
@@ -7,8 +8,7 @@ import CourseDetail from '../pages/CourseDetail';
 import AdminCreateCourse from '../pages/AdminCreateCourse';
 import ProtectedRoute from './ProtectedRoute';
 import { isAuthenticated } from '../utils/auth';
-import LessonView from "../pages/LessonView";
-
+import LessonView from '../pages/LessonView'; // if you created this
 
 const AppRouter = () => {
   return (
@@ -47,20 +47,20 @@ const AppRouter = () => {
           }
         />
         <Route
+          path="/lessons/:id"
+          element={
+            <ProtectedRoute>
+              <LessonView />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/admin/create-course"
           element={
             <ProtectedRoute requireAdmin>
               <AdminCreateCourse />
             </ProtectedRoute>
           }
-        />
-        <Route
-          path="/lessons/:id"
-          element={
-            <ProtectedRoute>
-              <LessonView />
-            </ProtectedRoute>
-  }
         />
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />

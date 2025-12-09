@@ -48,56 +48,57 @@ const Courses = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen pb-10">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">
-            Browse Courses
-          </h1>
+      <main className="mx-auto mt-6 max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-8 rounded-3xl border border-slate-700/80 bg-bg-card p-6 shadow-inner-glow">
+          <h1 className="text-2xl font-bold text-slate-50">Browse Courses</h1>
+          <p className="mt-1 text-sm text-slate-300">
+            Search through all embedded systems courses available in the club LMS.
+          </p>
 
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <div className="mt-5 relative">
+            <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
-              placeholder="Search courses by title, code, or description..."
+              placeholder="Search by title, code, or description..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full rounded-2xl border border-slate-700 bg-slate-950/60 pl-11 pr-4 py-2.5 text-sm text-slate-100 outline-none ring-primary-500/40 focus:border-cyan-400/60 focus:ring-2"
             />
           </div>
         </div>
 
         {loading ? (
-          <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="flex h-40 items-center justify-center">
+            <div className="h-10 w-10 animate-spin rounded-full border-2 border-cyan-500 border-t-transparent" />
           </div>
         ) : filteredCourses.length > 0 ? (
           <div>
-            <p className="text-gray-600 mb-4">
+            <p className="mb-3 text-xs font-mono uppercase tracking-[0.18em] text-slate-400">
               Showing {filteredCourses.length} course
               {filteredCourses.length !== 1 ? 's' : ''}
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {filteredCourses.map((course) => (
                 <CourseCard key={course.id} {...course} />
               ))}
             </div>
           </div>
         ) : (
-          <div className="text-center py-12 bg-white rounded-xl shadow">
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+          <div className="rounded-3xl border border-dashed border-slate-700/80 bg-slate-950/60 p-10 text-center">
+            <h3 className="text-lg font-semibold text-slate-100">
               No courses found
             </h3>
-            <p className="text-gray-600">
+            <p className="mt-2 text-sm text-slate-400">
               {searchTerm
                 ? 'Try adjusting your search terms.'
-                : 'No courses available at the moment.'}
+                : 'No courses are available at the moment.'}
             </p>
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 };

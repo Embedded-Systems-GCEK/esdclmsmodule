@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { BookOpen } from 'lucide-react';
+import { Cpu } from 'lucide-react';
 import axios from '../api/axios';
 
 const Register = () => {
@@ -23,116 +23,124 @@ const Register = () => {
       await axios.post('/auth/register', formData);
       navigate('/login');
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError('Registration failed. Please try again.');
-      }
+      setError('Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
-        <div className="flex items-center justify-center mb-8">
-          <BookOpen className="w-12 h-12 text-blue-600 mr-3" />
-          <h1 className="text-3xl font-bold text-gray-800">ESDC LMS</h1>
-        </div>
+    <div className="flex min-h-screen items-center justify-center px-4">
+      <div className="relative w-full max-w-md">
+        <div className="pointer-events-none absolute -inset-1 rounded-3xl bg-gradient-to-r from-violet-500/40 via-transparent to-cyan-500/40 blur-2xl" />
 
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
-          Create Account
-        </h2>
-
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Full Name
-            </label>
-            <input
-              type="text"
-              required
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-              placeholder="John Doe"
-            />
+        <div className="relative rounded-3xl border border-slate-700/80 bg-slate-950/80 p-8 shadow-[0_0_40px_rgba(15,23,42,0.9)]">
+          <div className="mb-8 flex flex-col items-center">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-cyan-500 shadow-glow">
+              <Cpu className="h-6 w-6 text-slate-950" />
+            </div>
+            <h1 className="text-2xl font-bold text-slate-50">ESDC LMS</h1>
+            <p className="mt-1 text-xs font-mono uppercase tracking-[0.2em] text-violet-300">
+              Join the learning grid
+            </p>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Email Address
-            </label>
-            <input
-              type="email"
-              required
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-              placeholder="student@esdc.edu"
-            />
-          </div>
+          <h2 className="mb-4 text-lg font-semibold text-slate-100">
+            Create account
+          </h2>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Password
-            </label>
-            <input
-              type="password"
-              required
-              value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-              placeholder="••••••••"
-            />
-          </div>
+          {error && (
+            <div className="mb-4 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-2 text-xs text-red-200">
+              {error}
+            </div>
+          )}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Role
-            </label>
-            <select
-              value={formData.role}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  role: e.target.value as 'admin' | 'student',
-                })
-              }
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-slate-300">
+                Full Name
+              </label>
+              <input
+                type="text"
+                required
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-4 py-2.5 text-sm text-slate-100 outline-none ring-accent-500/40 focus:border-violet-400/60 focus:ring-2"
+                placeholder="John Doe"
+              />
+            </div>
+
+            <div>
+              <label className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-slate-300">
+                Email Address
+              </label>
+              <input
+                type="email"
+                required
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
+                className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-4 py-2.5 text-sm text-slate-100 outline-none ring-accent-500/40 focus:border-violet-400/60 focus:ring-2"
+                placeholder="student@esdc.edu"
+              />
+            </div>
+
+            <div>
+              <label className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-slate-300">
+                Password
+              </label>
+              <input
+                type="password"
+                required
+                value={formData.password}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+                className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-4 py-2.5 text-sm text-slate-100 outline-none ring-accent-500/40 focus:border-violet-400/60 focus:ring-2"
+                placeholder="••••••••"
+              />
+            </div>
+
+            <div>
+              <label className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-slate-300">
+                Role
+              </label>
+              <select
+                value={formData.role}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    role: e.target.value as 'admin' | 'student',
+                  })
+                }
+                className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-4 py-2.5 text-sm text-slate-100 outline-none ring-accent-500/40 focus:border-violet-400/60 focus:ring-2"
+              >
+                <option value="student">Student</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="mt-2 w-full rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 py-2.5 text-sm font-semibold text-slate-950 shadow-glow transition hover:from-violet-400 hover:to-cyan-400 disabled:opacity-60"
             >
-              <option value="student">Student</option>
-              <option value="admin">Admin</option>
-            </select>
+              {loading ? 'Creating account…' : 'Register'}
+            </button>
+          </form>
+
+          <div className="mt-5 text-center text-xs text-slate-400">
+            <span>Already have an account? </span>
+            <Link
+              to="/login"
+              className="font-medium text-cyan-300 hover:text-cyan-200"
+            >
+              Login
+            </Link>
           </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? 'Creating Account...' : 'Register'}
-          </button>
-        </form>
-
-        <div className="mt-6 text-center">
-          <Link
-            to="/login"
-            className="text-blue-600 hover:text-blue-700 text-sm font-medium"
-          >
-            Already have an account? Login
-          </Link>
         </div>
       </div>
     </div>
